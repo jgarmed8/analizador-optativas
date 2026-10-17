@@ -26,15 +26,24 @@ func NuevaCondicionMinima(
 	tipo TipoCondicion,
 	notaMinima *float64,
 ) (CondicionMinima, error) {
+	if !tiposEvaluacionValidos[parte] {
+		return CondicionMinima{}, ErrTipoEvaluacionInvalido
+	}
+
 	switch tipo {
 	case NotaMinima:
 		if notaMinima == nil {
 			return CondicionMinima{}, ErrNotaMinimaSinNota
 		}
+
+		valor := *notaMinima
+		notaMinima = &valor
+
 	case AprobarParte:
 		if notaMinima != nil {
 			return CondicionMinima{}, ErrAprobarParteConNota
 		}
+
 	default:
 		return CondicionMinima{}, ErrTipoCondicionInvalido
 	}
