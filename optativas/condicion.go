@@ -1,6 +1,9 @@
 package optativas
 
-import "errors"
+import (
+	"errors"
+	"math"
+)
 
 type TipoCondicion string
 
@@ -10,9 +13,10 @@ const (
 )
 
 var (
-	ErrNotaMinimaSinNota     = errors.New("una condición de nota mínima necesita una nota")
-	ErrAprobarParteConNota   = errors.New("una condición de aprobar una parte no debe incluir una nota mínima")
-	ErrTipoCondicionInvalido = errors.New("tipo de condición no válido")
+	ErrNotaMinimaSinNota      = errors.New("una condición de nota mínima necesita una nota")
+	ErrAprobarParteConNota    = errors.New("una condición de aprobar una parte no debe incluir una nota mínima")
+	ErrTipoCondicionInvalido  = errors.New("tipo de condición no válido")
+	ErrNotaMinimaFueraDeRango = errors.New("la nota mínima debe estar entre 0 y 10")
 )
 
 type CondicionMinima struct {
@@ -34,6 +38,10 @@ func NuevaCondicionMinima(
 	case NotaMinima:
 		if notaMinima == nil {
 			return CondicionMinima{}, ErrNotaMinimaSinNota
+		}
+
+		if math.IsNaN(*notaMinima) || *notaMinima < 0 || *notaMinima > 10 {
+			return CondicionMinima{}, ErrNotaMinimaFueraDeRango
 		}
 
 		valor := *notaMinima

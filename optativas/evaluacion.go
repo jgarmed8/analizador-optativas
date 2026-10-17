@@ -1,6 +1,9 @@
 package optativas
 
-import "errors"
+import (
+	"errors"
+	"math"
+)
 
 type TipoEvaluacion string
 
@@ -37,7 +40,7 @@ func NuevaParteEvaluacion(tipo TipoEvaluacion, porcentaje float64) (ParteEvaluac
 		return ParteEvaluacion{}, ErrTipoEvaluacionInvalido
 	}
 
-	if porcentaje < 0 || porcentaje > 100 {
+	if math.IsNaN(porcentaje) || porcentaje < 0 || porcentaje > 100 {
 		return ParteEvaluacion{}, ErrPorcentajeInvalido
 	}
 
